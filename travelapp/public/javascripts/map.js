@@ -29,6 +29,13 @@ function initMap() {
 	google.maps.event.addListener(map, "rightclick", function (event) {
 	    var latitude = event.latLng.lat();
 	    var longitude = event.latLng.lng();
+	    var myLatLng = {lat: latitude, lng: longitude};
+	    var marker = new google.maps.Marker({
+			position: myLatLng,
+			map: map,
+			title: 'Hello World!'
+        });
+
 	    console.log( latitude + ', ' + longitude );
 	});
 }
