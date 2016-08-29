@@ -25,7 +25,14 @@ function initMap() {
 		// Browser doesn't support Geolocation
 		handleLocationError(false, infoWindow, map.getCenter());
 	}
+
+	google.maps.event.addListener(map, "rightclick", function (event) {
+	    var latitude = event.latLng.lat();
+	    var longitude = event.latLng.lng();
+	    console.log( latitude + ', ' + longitude );
+	});
 }
+
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 	infoWindow.setPosition(pos);
