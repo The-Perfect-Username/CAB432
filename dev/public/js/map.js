@@ -2,22 +2,24 @@ var map;
 
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
-		center: {lat: -34.397, lng: 150.644},
-		zoom: 8
+		zoom: 14
 	});
-
-	var infoWindow = new google.maps.InfoWindow({map: map});
 
 	// Try HTML5 geolocation.
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
-			var pos = {
+			
+            var pos = {
 				lat: position.coords.latitude,
 				lng: position.coords.longitude
 			};
 
-			infoWindow.setPosition(pos);
-			infoWindow.setContent('Location found.');
+			var marker = new google.maps.Marker({
+                position: pos,
+                map: map,
+                title: "You are here"
+            });
+            
 			map.setCenter(pos);
 		}, function() {
 			handleLocationError(true, infoWindow, map.getCenter());
@@ -33,8 +35,7 @@ function initMap() {
 	    var myLatLng = {lat: latitude, lng: longitude};
 	    var marker = new google.maps.Marker({
 			position: myLatLng,
-			map: map,
-			title: 'Hello World!'
+			map: map
         });
 
 	    console.log( latitude + ', ' + longitude );
