@@ -8,12 +8,13 @@ var yelp = new Yelp({
 });
 
 
-function YELP_ROUTER(router, connection) {
+function REST_ROUTER(router) {
 	var self = this;
-	self.handleRoutes(router, connection);
+	self.handleRoutes(router);
 }
 
 var jsonResult;
+
 
 function queryHandler(res, err, params) {
 	yelp.search(params)
@@ -28,25 +29,25 @@ function queryHandler(res, err, params) {
 
 }
 
-YELP_ROUTER.prototype.handleRoutes = function(router, connection) {
+REST_ROUTER.prototype.handleRoutes = function(router) {
 	var self = this;
 	router.get("/", function(request, response){
 		response.json({"message": "Hello World!"});
 	});
 
-	router.get("bylocation/:term/:location", function(req, res){
-		var a = req.params.term;
-		var b = req.params.location;
-		var params = {a, b};
+	router.get("/bylocation/:term/:location", function(req, res){
+		var term     = req.params.term;
+		var location = req.params.location;
+		var params   = {"term": a, "location": b};
 		queryHandler(res, null, params);
 	});
 
-	router.get("bycoord/:term/:ll", function(req, res){
-		var a = req.params.term;
-		var b = req.params.ll;
-		var params = {a, b};
+	router.get("/bycoord/:term/:ll", function(req, res){
+		var term   = req.params.term;
+		var ll     = req.params.ll;
+		var params = {"term": term, "ll": ll};
 		queryHandler(res, null, params);
 	});
 };
 
-module.exports = YELP_ROUTER;
+module.exports = REST_ROUTER;
