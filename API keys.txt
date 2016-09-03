@@ -4,3 +4,8 @@ Instagram API:  Client: 487a5a907380409cbfb502281496cd4f
 		Secret: cc16dd50efc74ce18ce2470d414c900f
 		Code:   2fc3915c6786412ba4215b4beb55fdf5
 		Auth0:  3814342480.487a5a9.2b3d788564544b8dbd9668a0ef2c7b97
+
+Yelp API:	Consumer Key:    _1Kxu0NdU02g_myZiaaVMQ
+		Consumer Secret: cQJNZiyseTLos6GPESktwOSAbQ0
+		Token:           UoJZd3FQZaPfD-fpfTkYEmZad7IMmJIr
+		Token Secret:    FfGhCbWh-kAOd55qOZhulhgttuY
