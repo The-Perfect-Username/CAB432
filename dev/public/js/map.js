@@ -38,7 +38,14 @@ function initMap() {
 			map: map
         });
 
-	    console.log( latitude + ', ' + longitude );
+
+	    // jQuery
+	    $(function(){
+	    	console.log( latitude + ', ' + longitude );
+	    	$('p#text').text(latitude + ', ' + longitude);
+	    });
+	    
+	    
 	});
 }
 
