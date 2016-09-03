@@ -24,9 +24,9 @@ function queryHandler(res, err, params) {
 	.catch(function (err) {
 		jsonResult = err;
 	});
-
 	res.json(jsonResult);
-
+	console.log(typeof jsonResult);
+	console.log(jsonResult.region.span.businesses[0].rating);
 }
 
 REST_ROUTER.prototype.handleRoutes = function(router) {
@@ -38,7 +38,7 @@ REST_ROUTER.prototype.handleRoutes = function(router) {
 	router.get("/bylocation/:term/:location", function(req, res){
 		var term     = req.params.term;
 		var location = req.params.location;
-		var params   = {"term": a, "location": b};
+		var params   = {"term": term, "location": location};
 		queryHandler(res, null, params);
 	});
 
