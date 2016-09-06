@@ -41,9 +41,36 @@ function initMap() {
 
 	    // jQuery
 	    $(function(){
+	    	var coords = latitude + ',' + longitude;
+	    	coords = coords.toString();
+	    	$.ajax({
+	    		type: 'GET',
+	    		url: "http://localhost:3000/yelp/bycoord/bars/" + coords,
+	    		success: function(data) {
+	    			var result = data[0].rating + ", " + data[0].name;
+	    			var len = data.length;
+	    			console.log(len);
+	    			var t = thing(data);
+	    			$('div#text').html(t);
+	    		}
+
+	    	});
 	    	console.log( latitude + ', ' + longitude );
-	    	$('p#text').text(latitude + ', ' + longitude);
+	    	
 	    });
+
+	    function thing(data) {
+	    	var html = "";
+	    	var result;
+	    	var rating_img;
+	    	for (var i = 0; i < data.length; i++) {
+	    		rating_img = "<img src='" + data[i].rating_img_url + "' alt='ratings' />";
+	    		result = i + 1 + ": " + data[i].name + ", Reviews: " + data[i].review_count + ", Address: " + data[i].location.display_address[0] + ", " + data[i].location.display_address[1] + ", " + data[i].location.coordinate.latitude + ", " + typeof data[i].location.coordinate.longitude;
+	    		html += "<p>" + result + "</p>" + rating_img;
+
+	    	}
+	    	return html;
+	    }
 	    
 	    
 	});

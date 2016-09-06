@@ -13,20 +13,16 @@ function REST_ROUTER(router) {
 	self.handleRoutes(router);
 }
 
-var jsonResult;
 
-
-function queryHandler(res, err, params) {
+function queryHandler(res, params) {
 	yelp.search(params)
 	.then(function (data) {
-		jsonResult = data;
+		res.send(data.businesses);
 	})
 	.catch(function (err) {
-		jsonResult = err;
+		res.send(err);
 	});
-	res.json(jsonResult);
-	console.log(typeof jsonResult);
-	console.log(jsonResult.region.span.businesses[0].rating);
+	
 }
 
 REST_ROUTER.prototype.handleRoutes = function(router) {
@@ -39,14 +35,14 @@ REST_ROUTER.prototype.handleRoutes = function(router) {
 		var term     = req.params.term;
 		var location = req.params.location;
 		var params   = {"term": term, "location": location};
-		queryHandler(res, null, params);
+		queryHandler(res, params);
 	});
 
 	router.get("/bycoord/:term/:ll", function(req, res){
 		var term   = req.params.term;
 		var ll     = req.params.ll;
 		var params = {"term": term, "ll": ll};
-		queryHandler(res, null, params);
+		queryHandler(res, params);
 	});
 };
 
