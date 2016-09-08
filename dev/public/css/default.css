@@ -19,22 +19,22 @@ main {
 #map {
 	display: inline-block;
 	height: 100%;
-	width: 70%;
+	width: 100%;
 	position: absolute;
-	left: 30%;
 	
 }
 
 #side-bar {
 	display: inline-block;
 	position: absolute;
-	width: 30%;
+	width: 400px;
 	max-height: 100%;
 	left: 0;
+	background: #fff;
 }
 
 .wrapper {
-	padding: 20px;
+	padding: 12px;
 }
 
 #side-header {
@@ -115,11 +115,29 @@ form .form-group {
 	margin: 0;
 }
 
+#search-wrapper {
+	padding: 8px;
+	border-radius: 5px;
+	background: #fff;
+	box-shadow: 1px 2px 3px #888888;
+}
+
+span#search-icon {
+	font-size: 20px;
+	vertical-align: middle;
+	float: right;
+	transform: translate(-50%, 0);
+	cursor: pointer;
+	
+}
+
 form input[type="text"] {
 	outline: none;
 	margin: 0;
 	padding: 5px;
-	width: 100%;
+	width: 80%;
 	border: none;
+	//border: 1px solid;
+
 }
 
