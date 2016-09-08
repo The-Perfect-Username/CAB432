@@ -59,9 +59,10 @@ $(document).ready(function() {
         return html;
     }
 });
-
+var markers = {};
 function show_result_icon_on_click(map) {
     $(document).on("click", ".result", function() {
+        remove_marker(markers);
         var coords = $(this).attr("rel");
         coords     = coords.split(",");
         var latitude = parseFloat(coords[0]);
@@ -72,8 +73,18 @@ function show_result_icon_on_click(map) {
         };
         // Creates a new marker
         var marker = new google.maps.Marker({
+            id: 1,
             position: pos,
             map: map
         });
+
+        markers[0] = marker;
     });
+}
+
+function remove_marker(markers) {
+    if (markers[0]) {
+        markers[0].setMap(null);
+        delete markers[0];
+    }
 }
