@@ -24,8 +24,8 @@ $(document).ready(function() {
     	var rating_img;
     	for (var i = 0; i < data.length; i++) {
     		rating_img = "<img src='" + data[i].rating_img_url + "' alt='ratings' />";
-    		result = i + 1 + ": " + data[i].name + ", Reviews: " + data[i].review_count + ", Address: " + data[i].location.display_address[0] + ", " + data[i].location.display_address[1];
-    		html += "<p>" + result + "</p>" + rating_img;
+    		result = data[i].name + ", Reviews: " + data[i].review_count + ", Address: " + data[i].location.display_address[0] + ", " + data[i].location.display_address[1];
+    		html += "<div class='result'><p>" + result + "</p>" + rating_img + "</div>";
     	}
 
     	return html;
