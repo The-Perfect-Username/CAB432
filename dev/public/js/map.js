@@ -105,19 +105,20 @@ function initMap() {
 	    function thing(data) {
 	    	var html = "";
 	    	var result;
-	    	var name, rating_img, num_of_reviews, preview_image, address;
+	    	var name, rating_img, num_of_reviews, preview_image, address, url;
 	    	for (var i = 0; i < data.length; i++) {
 	    		rating_img = data[i].rating_img_url;
 	    		name = data[i].name; 
 	    		num_of_reviews = data[i].review_count;
 	    		address =  data[i].location.display_address[0] + ", " + data[i].location.display_address[1];
 	    		preview_image = data[i].image_url;
-	    		html += result_design(name, rating_img, num_of_reviews, address, preview_image);
+	    		url = data[i].url;
+	    		html += result_design(name, rating_img, num_of_reviews, address, preview_image, url);
 	    	}
 	    	return html;
 	    }
 
-	    function result_design(name, rating, reviews, address, preview) {
+	    function result_design(name, rating, reviews, address, preview, url) {
 	    	html = "<div class='result'>";
 	    	html += "<div class='result-info'>";
 			html += "<h4 class='result-name'>" + name + "</h4>";
@@ -127,6 +128,9 @@ function initMap() {
 			html += "</li>"
 			html += "<li class='inline-item light-grey'>";
 			html += "(" + reviews + ")";
+			html += "</li>";
+			html += "<li class='inline-item light-grey'>";
+			html += "<a class='yelp-link light-grey' href='" + url + "' target='_blank' title='View on Yelp'><i class='fa fa-yelp' aria-hidden='true'></i></a>";
 			html += "</li>";
 			html += "</ul>";
 			html += "<p class='address-info grey'>" + address + "</p>";
