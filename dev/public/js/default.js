@@ -25,6 +25,16 @@ $(document).ready(function() {
         $("form").submit();
     });
 
+    $("#info-circle-btn").hover(function () {
+        $(this).popover({
+            content: "<b>Location:</b> Use 'location: city/suburb' to search for a location <br /> <b>Tags:</b> Use 'tags: tag1, tag2, tag3' to search for places like \"Bars\" <br /> <b>Rating:</b> Use 'rating: 4' Search for places with a minimal score of 4/5",
+            container: 'body',
+            html: true
+        }).popover('show');
+    }, function () {
+        $(this).popover('hide');
+    });
+
 	function thing(data) {
         var html = "";
         var result;
