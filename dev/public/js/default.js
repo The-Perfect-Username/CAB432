@@ -3,17 +3,19 @@ $(document).ready(function() {
 	$("form").on("submit", function(e) {
 		e.preventDefault();
 		var value = $("input#search-bar").val();
-		$.ajax({
-    		type: 'GET',
-    		url: "http://localhost:3000/yelp/bylocation/bars/" + value,
-    		success: function(data) {
-    			var result = data[0].rating + ", " + data[0].name;
-    			var len = data.length;
-    			console.log(len);
-    			var t = thing(data);
-    			$('div#text').html(t);
-    		}
-    	});
+        if (value) {
+    		$.ajax({
+        		type: 'GET',
+        		url: "http://localhost:3000/yelp/bylocation/bars/" + value,
+        		success: function(data) {
+        			var result = data[0].rating + ", " + data[0].name;
+        			var len = data.length;
+        			console.log(len);
+        			var t = thing(data);
+        			$('div#text').html(t);
+        		}
+        	});
+        }
 
 	});
 
