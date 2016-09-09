@@ -17,6 +17,14 @@ $(document).ready(function() {
 
 	});
 
+    $(document).on("click", "#delete-icon", function() {
+        $("#search-bar").val("");
+    });
+
+    $(document).on("click", "#search-icon", function() {
+        $("form").submit();
+    });
+
 	function thing(data) {
         var html = "";
         var result;
