@@ -19,6 +19,25 @@ $(document).ready(function() {
 
 	});
 
+    $(document).on("click", ".search-by", function() {
+        var sort = parseInt($(this).attr("rel"));
+        var value = "taringa";
+        if (value) {
+            $.ajax({
+                type: 'GET',
+                url: "http://localhost:3000/yelp/bylocation/bars/" + value + "/" + sort,
+                success: function(data) {
+                    var result = data[0].rating + ", " + data[0].name;
+                    var len = data.length;
+                    console.log(len);
+                    var t = thing(data);
+                    $('div#text').html(t);
+                }
+            });
+        }
+
+    });    
+
     $(document).on("click", "#delete-icon", function() {
         $("#search-bar").val("");
     });
@@ -27,9 +46,22 @@ $(document).ready(function() {
         $("form").submit();
     });
 
+
+    function popover_design() {
+        var html = "<ul id='popover-list'>";
+        html += " <li><b>Best Match</b> sorts results based off distance, reviews, and ratings.</li>";
+        html += " <li><b>Distance</b> sorts results out by distance.</li>";
+        html += " <li><b>Rating</b> returns the higher rated results first.</li>";
+        html += " <li><b>Right click</b> on the map to set a new marker and find results near that area.</li>";
+        html += " <li><b>Left click</b> on the marker to zoom in and center the map.</li>";
+        html += "</ul>";
+        return html;
+    }
+
+
     $("#info-circle-btn").hover(function () {
         $(this).popover({
-            content: "<b>Location:</b> Use 'location: city/suburb' to search for a location <br /> <b>Tags:</b> Use 'tags: tag1, tag2, tag3' to search for places like \"Bars\" <br /> <b>Rating:</b> Use 'rating: 4' Search for places with a minimal score of 4/5",
+            content: popover_design(),
             container: 'body',
             html: true
         }).popover('show');
@@ -46,7 +78,7 @@ $(document).ready(function() {
             name = data[i].name; 
             num_of_reviews = data[i].review_count;
             address =  data[i].location.display_address[0] + ", " + data[i].location.display_address[1];
-            preview_image = data[i].image_url;
+            preview_image = '';//data[i].image_url;
             url = data[i].url;
             coords = data[i].location.coordinate.latitude + "," + data[i].location.coordinate.longitude;
             html += result_design(name, rating_img, num_of_reviews, address, preview_image, url, coords);

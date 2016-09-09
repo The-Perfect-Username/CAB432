@@ -27,15 +27,26 @@ function queryHandler(res, params) {
 
 REST_ROUTER.prototype.handleRoutes = function(router) {
 	var self = this;
-	router.get("/", function(request, response){
-		response.json({"message": "Hello World!"});
-	});
-
 	router.get("/bylocation/:term/:location", function(req, res){
 		var term     = req.params.term;
 		var location = req.params.location;
 		var params   = {"term": term, "location": location};
 		queryHandler(res, params);
+
+		//req.session.location = location;
+		//console.log(req.session.location);
+	});
+
+	router.get("/bylocation/:term/:location/:sort", function(req, res){
+		var term     = req.params.term;
+		//var location = req.params.location == "null" ? req.session.location : req.params.location;
+		var location = req.params.location;
+		var sort     = req.params.sort;
+		var params   = {"term": term, "location": location, "sort": sort};
+		queryHandler(res, params);
+
+		//req.session.location = location;
+		//console.log(req.session.location);
 	});
 
 	router.get("/bycoord/:term/:ll", function(req, res){
@@ -43,6 +54,18 @@ REST_ROUTER.prototype.handleRoutes = function(router) {
 		var ll     = req.params.ll;
 		var params = {"term": term, "ll": ll};
 		queryHandler(res, params);
+
+		//req.session.ll = ll;
+	});
+
+	router.get("/bycoord/:term/:ll/:sort", function(req, res){
+		var term   = req.params.term;
+		var ll     = req.params.ll;
+		var sort   = req.params.sort;
+		var params = {"term": term, "ll": ll, "sort": sort};
+		queryHandler(res, params);
+
+		//req.session.ll = ll;
 	});
 };
 

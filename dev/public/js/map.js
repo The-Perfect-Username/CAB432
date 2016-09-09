@@ -99,6 +99,12 @@ function initMap() {
 	    });
     }
 
+    function search_location() {
+    	$(function() {
+    		//http://maps.google.com/maps/api/geocode/json?address=Taringa&sensor=false
+    	});
+    }
+
     function thing(data) {
     	var html = "";
     	var result;
@@ -108,7 +114,7 @@ function initMap() {
     		name = data[i].name; 
     		num_of_reviews = data[i].review_count;
     		address =  data[i].location.display_address[0] + ", " + data[i].location.display_address[1];
-    		preview_image = data[i].image_url;
+    		preview_image = '';//data[i].image_url;
     		url = data[i].url;
     		coords = data[i].location.coordinate.latitude + "," + data[i].location.coordinate.longitude;
     		html += result_design(name, rating_img, num_of_reviews, address, preview_image, url, coords);
