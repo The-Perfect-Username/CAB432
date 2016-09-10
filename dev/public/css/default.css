@@ -44,7 +44,7 @@ main {
 #side-body {
 	display: inline-block;
 	position: relative;
-	height: 89.5vh;
+	height: 86.5vh;
 	width: 100%;
 	overflow-y: scroll;
 }
