@@ -3,7 +3,8 @@ var path = require('path')
 var http = require('http');
 var app = express();
 var bodyParser = require("body-parser");
-var api = require("./APIs/yelp.js");
+var yelpApi = require("./APIs/yelp.js");
+var uberApi = require("./APIs/uber.js");
 var Yelp = require('yelp');
 var session = require('express-session');
 
@@ -28,7 +29,9 @@ REST.prototype.configure = function() {
 	var self = this;
 	var router = express.Router();
 	app.use('/yelp', router);
-	var rest_router = new api(router);
+	app.use('/uber', router);
+	var yelp_router = new yelpApi(router);
+	var uber_router = new uberApi(router);
 	self.startServer();
 };
 

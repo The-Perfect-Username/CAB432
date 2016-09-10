@@ -18,22 +18,33 @@ function REST_ROUTER(router) {
 
 
 function queryHandler(res, params) {
-	yelp.search(params)
-	.then(function (data) {
-		res.send(data.businesses);
-	})
-	.catch(function (err) {
-		res.send(err);
+	uber.estimates.getPriceForRoute(params.start_lat, params.start_lon, params.end_lat, params.end_lon, function (err, data) {
+ 		if (err) {
+ 			res.send(err);
+ 		} else {
+ 			res.send(data);
+ 		}
 	});
 	
 }
 
 REST_ROUTER.prototype.handleRoutes = function(router) {
 	var self = this;
-	router.get("/bylocation/:start/:end", function(req, res){
-		var term     = req.params.term;
-		var location = req.params.location;
-		var params   = {"term": term, "location": location};
+	router.get("/fare/:start/:end", function(req, res){
+		
+		var start  = req.params.start;
+		var end    = req.params.end;
+
+		var start_coords = start.split(",");
+		var end_coords = end.split(",");
+
+		var start_lat = start_coords[0];
+		var start_lon = start_coords[1];
+
+		var end_lat = end_coords[0];
+		var end_lon = end_coords[1];
+
+		var params = {"start_lat": start_lat, "start_lon": start_lon, "end_lat": end_lat, "end_lon": end_lon};
 		queryHandler(res, params);
 	});
 
