@@ -78,15 +78,14 @@ $(document).ready(function() {
             name = data[i].name; 
             num_of_reviews = data[i].review_count;
             address =  data[i].location.display_address[0] + ", " + data[i].location.display_address[1];
-            preview_image = '';//data[i].image_url;
             url = data[i].url;
             coords = data[i].location.coordinate.latitude + "," + data[i].location.coordinate.longitude;
-            html += result_design(name, rating_img, num_of_reviews, address, preview_image, url, coords);
+            html += result_design(name, rating_img, num_of_reviews, address, url, coords);
         }
         return html;
     }
 
-    function result_design(name, rating, reviews, address, preview, url, coords) {
+    function result_design(name, rating, reviews, address, url, coords) {
         html = "<div class='result' rel='" + coords + "'>";
         html += "<div class='result-info'>";
         html += "<h4 class='result-name'>" + name + "</h4>";
@@ -102,9 +101,6 @@ $(document).ready(function() {
         html += "</li>";
         html += "</ul>";
         html += "<p class='address-info grey'>" + address + "</p>";
-        html += "</div>";
-        html += "<div class='image-wrapper'>";
-        html += "<img class='preview-img' src='" + preview + "' />";
         html += "</div>";
         html += "</div>";
 
@@ -131,6 +127,20 @@ function show_result_icon_on_click(map) {
         });
 
         markers[0] = marker;
+    });
+}
+
+function uber_fare_estimate(start_lat, start_lon, end_lat, end_lon) {
+    $(function() {
+        var start = start_lat + "," + start_lon;
+        var end = end_lat + "," + end_lon;
+        $.ajax({
+            type: 'GET',
+            url: "http://localhost:3000/uber/fare/" + start + "/" + end,
+            success: function(data) {
+                console.log("$" + data.prices[0].low_estimate + " - $" + data.prices[0].high_estimate);
+            }
+        });
     });
 }
 
