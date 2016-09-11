@@ -1,6 +1,7 @@
 var map;
 var marker;
 var current_coords;
+var current_position;
 
 function initMap() {
 	//var marker;
@@ -18,7 +19,7 @@ function initMap() {
 				lng: position.coords.longitude
 			};
 			
-
+			current_position = pos.lat + "," + pos.lng;
 			// Creates a new marker
 			var marker = new google.maps.Marker({
                 position: pos,

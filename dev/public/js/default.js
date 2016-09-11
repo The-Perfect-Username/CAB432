@@ -86,12 +86,13 @@ function thing(data) {
         address =  data[i].location.display_address[0] + ", " + data[i].location.display_address[1];
         url = data[i].url;
         coords = data[i].location.coordinate.latitude + "," + data[i].location.coordinate.longitude;
-        html += result_design(name, rating_img, num_of_reviews, address, url, coords);
+        uber_fare_estimate(i, current_position, coords);
+        html += result_design(i, name, rating_img, num_of_reviews, address, url, coords);
     }
     return html;
 }
 
-function result_design(name, rating, reviews, address, url, coords) {
+function result_design(id, name, rating, reviews, address, url, coords) {
     html = "<div class='result' rel='" + coords + "'>";
     html += "<div class='result-info'>";
     html += "<h4 class='result-name'>" + name + "</h4>";
@@ -104,6 +105,12 @@ function result_design(name, rating, reviews, address, url, coords) {
     html += "</li>";
     html += "<li class='inline-item light-grey'>";
     html += "<a class='yelp-link light-grey' href='" + url + "' target='_blank' title='View on Yelp'><i class='fa fa-yelp' aria-hidden='true'></i></a>";
+    html += "</li>";
+    html += "<li class='inline-item light-grey'>";
+    html += "<span id='uber-fare-" + id + "' title='Uber fare estimates'><i id='uber-load-" + id + "' class='fa fa-spinner fa-spin' aria-hidden='true'></i></span>";
+    html += "</li>";
+    html += "<li class='inline-item light-grey'>";
+    html += "<span id='distance-" + id + "' title='Distance'><i id='uber-load-" + id + "' class='fa fa-spinner fa-spin' aria-hidden='true'></i></span>";
     html += "</li>";
     html += "</ul>";
     html += "<p class='address-info grey'>" + address + "</p>";
@@ -136,19 +143,22 @@ function show_result_icon_on_click(map) {
     });
 }
 
-function uber_fare_estimate(start_lat, start_lon, end_lat, end_lon) {
-    /*
+function m2km(miles) {
+    return (miles * 1.6093).toFixed(2);  // returns a string
+}
+
+function uber_fare_estimate(id, start, end) {
     $(function() {
-        var start = start_lat + "," + start_lon;
-        var end = end_lat + "," + end_lon;
         $.ajax({
             type: 'GET',
             url: "http://localhost:3000/uber/fare/" + start + "/" + end,
             success: function(data) {
-                console.log("$" + data.prices[0].low_estimate + " - $" + data.prices[0].high_estimate);
+                $("i#uber-load-" + id).remove();
+                $("span#uber-fare-" + id).text("$" + data.prices[0].low_estimate + " - $" + data.prices[0].high_estimate);
+                $("span#distance-" + id).text(m2km(parseFloat(data.prices[0].distance)) + " km");
             }
         });
-    });*/
+    });
 }
 
 function remove_marker(markers) {
@@ -160,12 +170,13 @@ function remove_marker(markers) {
 
 
 function spinner_icon() {
-    $("i.fa-times").addClass("fa-spinner fa-spin");
-    $("i.fa-spinner").removeClass("fa-times");
+    $("i.fa-times").addClass("fa-spinner fa-spin main-spinner");
+    $("i.main-spinner").removeClass("fa-times");
 }
 
 function x_icon() {
-    $("i.fa-spinner").addClass("fa-times");
-    $("i.fa-times").removeClass("fa-spinner fa-spin");
+    $("i.main-spinner").addClass("fa-times");
+    $("i.fa-times").removeClass("fa-spinner fa-spin main-spinner");
+    
 }
 
