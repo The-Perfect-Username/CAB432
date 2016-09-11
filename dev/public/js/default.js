@@ -1,40 +1,44 @@
+var search;
 $(document).ready(function() {
 
+    search = $("input").val();
 	$("form").on("submit", function(e) {
 		e.preventDefault();
-		var value = $("input#search-bar").val();
-        if (value) {
-    		$.ajax({
-        		type: 'GET',
-        		url: "http://localhost:3000/yelp/bylocation/bars/" + value,
-        		success: function(data) {
-        			var result = data[0].rating + ", " + data[0].name;
-        			var len = data.length;
-        			console.log(len);
-        			var t = thing(data);
-        			$('div#text').html(t);
-        		}
-        	});
-        }
+        search = $("input").val();
+		$.ajax({
+    		type: 'GET',
+    		url: "http://localhost:3000/yelp/bycoord/" + search + "/" + current_coords,
+            beforeSend: function() {
+                spinner_icon();
+            },
+    		success: function(data) {
+    			var len = data.length;
+    			var t = thing(data);
+    			$('div#text').html(t);
+                console.log(current_coords);
+                x_icon();
+    		}
+    	});
 
 	});
 
     $(document).on("click", ".search-by", function() {
         var sort = parseInt($(this).attr("rel"));
-        var value = "taringa";
-        if (value) {
-            $.ajax({
-                type: 'GET',
-                url: "http://localhost:3000/yelp/bylocation/bars/" + value + "/" + sort,
-                success: function(data) {
-                    var result = data[0].rating + ", " + data[0].name;
-                    var len = data.length;
-                    console.log(len);
-                    var t = thing(data);
-                    $('div#text').html(t);
-                }
-            });
-        }
+        search = $("input").val();
+        $.ajax({
+            type: 'GET',
+            url: "http://localhost:3000/yelp/bycoord/" + search + "/" + current_coords + "/" + sort,
+            beforeSend: function() {
+                spinner_icon();
+            },
+            success: function(data) {
+                var len = data.length;
+                console.log(len);
+                var t = thing(data);
+                $('div#text').html(t);
+                x_icon();
+            }
+        });
 
     });    
 
@@ -69,44 +73,46 @@ $(document).ready(function() {
         $(this).popover('hide');
     });
 
-	function thing(data) {
-        var html = "";
-        var result;
-        var name, rating_img, num_of_reviews, preview_image, address, url, coords;
-        for (var i = 0; i < data.length; i++) {
-            rating_img = data[i].rating_img_url;
-            name = data[i].name; 
-            num_of_reviews = data[i].review_count;
-            address =  data[i].location.display_address[0] + ", " + data[i].location.display_address[1];
-            url = data[i].url;
-            coords = data[i].location.coordinate.latitude + "," + data[i].location.coordinate.longitude;
-            html += result_design(name, rating_img, num_of_reviews, address, url, coords);
-        }
-        return html;
-    }
-
-    function result_design(name, rating, reviews, address, url, coords) {
-        html = "<div class='result' rel='" + coords + "'>";
-        html += "<div class='result-info'>";
-        html += "<h4 class='result-name'>" + name + "</h4>";
-        html += "<ul class='inline-list'>";
-        html += "<li class='inline-item'>";
-        html += "<span><img src='" + rating + "' alt='rating'></span>";
-        html += "</li>"
-        html += "<li class='inline-item light-grey'>";
-        html += "(" + reviews + ")";
-        html += "</li>";
-        html += "<li class='inline-item light-grey'>";
-        html += "<a class='yelp-link light-grey' href='" + url + "' target='_blank' title='View on Yelp'><i class='fa fa-yelp' aria-hidden='true'></i></a>";
-        html += "</li>";
-        html += "</ul>";
-        html += "<p class='address-info grey'>" + address + "</p>";
-        html += "</div>";
-        html += "</div>";
-
-        return html;
-    }
 });
+
+function thing(data) {
+    var html = "";
+    var result;
+    var name, rating_img, num_of_reviews, preview_image, address, url, coords;
+    for (var i = 0; i < data.length; i++) {
+        rating_img = data[i].rating_img_url;
+        name = data[i].name; 
+        num_of_reviews = data[i].review_count;
+        address =  data[i].location.display_address[0] + ", " + data[i].location.display_address[1];
+        url = data[i].url;
+        coords = data[i].location.coordinate.latitude + "," + data[i].location.coordinate.longitude;
+        html += result_design(name, rating_img, num_of_reviews, address, url, coords);
+    }
+    return html;
+}
+
+function result_design(name, rating, reviews, address, url, coords) {
+    html = "<div class='result' rel='" + coords + "'>";
+    html += "<div class='result-info'>";
+    html += "<h4 class='result-name'>" + name + "</h4>";
+    html += "<ul class='inline-list'>";
+    html += "<li class='inline-item'>";
+    html += "<span><img src='" + rating + "' alt='rating'></span>";
+    html += "</li>"
+    html += "<li class='inline-item light-grey'>";
+    html += "(" + reviews + ")";
+    html += "</li>";
+    html += "<li class='inline-item light-grey'>";
+    html += "<a class='yelp-link light-grey' href='" + url + "' target='_blank' title='View on Yelp'><i class='fa fa-yelp' aria-hidden='true'></i></a>";
+    html += "</li>";
+    html += "</ul>";
+    html += "<p class='address-info grey'>" + address + "</p>";
+    html += "</div>";
+    html += "</div>";
+
+    return html;
+}
+
 var markers = {};
 function show_result_icon_on_click(map) {
     $(document).on("click", ".result", function() {
@@ -131,6 +137,7 @@ function show_result_icon_on_click(map) {
 }
 
 function uber_fare_estimate(start_lat, start_lon, end_lat, end_lon) {
+    /*
     $(function() {
         var start = start_lat + "," + start_lon;
         var end = end_lat + "," + end_lon;
@@ -141,7 +148,7 @@ function uber_fare_estimate(start_lat, start_lon, end_lat, end_lon) {
                 console.log("$" + data.prices[0].low_estimate + " - $" + data.prices[0].high_estimate);
             }
         });
-    });
+    });*/
 }
 
 function remove_marker(markers) {
@@ -150,3 +157,15 @@ function remove_marker(markers) {
         delete markers[0];
     }
 }
+
+
+function spinner_icon() {
+    $("i.fa-times").addClass("fa-spinner fa-spin");
+    $("i.fa-spinner").removeClass("fa-times");
+}
+
+function x_icon() {
+    $("i.fa-spinner").addClass("fa-times");
+    $("i.fa-times").removeClass("fa-spinner fa-spin");
+}
+

@@ -36,7 +36,7 @@ REST_ROUTER.prototype.handleRoutes = function(router) {
 		var end    = req.params.end;
 
 		var start_coords = start.split(",");
-		var end_coords = end.split(",");
+		var end_coords   = end.split(",");
 
 		var start_lat = start_coords[0];
 		var start_lon = start_coords[1];
