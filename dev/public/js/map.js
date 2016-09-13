@@ -91,7 +91,7 @@ function initMap() {
 	    	search = $("input").val();
 	    	$.ajax({
 	    		type: 'GET',
-	    		url: "http://localhost:3000/yelp/bycoord/" + search + "/" + coords,
+	    		url: "yelp/bycoord/" + search + "/" + coords,
 	    		beforeSend: function() {
 	    			spinner_icon();
 	    		},

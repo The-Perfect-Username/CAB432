@@ -7,7 +7,7 @@ $(document).ready(function() {
         search = $("input").val();
 		$.ajax({
     		type: 'GET',
-    		url: "http://localhost:3000/yelp/bycoord/" + search + "/" + current_coords,
+    		url: "yelp/bycoord/" + search + "/" + current_coords,
             beforeSend: function() {
                 spinner_icon();
             },
@@ -27,7 +27,7 @@ $(document).ready(function() {
         search = $("input").val();
         $.ajax({
             type: 'GET',
-            url: "http://localhost:3000/yelp/bycoord/" + search + "/" + current_coords + "/" + sort,
+            url: "yelp/bycoord/" + search + "/" + current_coords + "/" + sort,
             beforeSend: function() {
                 spinner_icon();
             },
@@ -151,7 +151,7 @@ function uber_fare_estimate(id, start, end) {
     $(function() {
         $.ajax({
             type: 'GET',
-            url: "http://localhost:3000/uber/fare/" + start + "/" + end,
+            url: "uber/fare/" + start + "/" + end,
             success: function(data) {
                 $("i#uber-load-" + id).remove();
                 $("span#uber-fare-" + id).text("$" + data.prices[0].low_estimate + " - $" + data.prices[0].high_estimate);
