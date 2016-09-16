@@ -1,5 +1,5 @@
 var map;
-var marker;
+var marker, markerArray = [];
 var current_coords;
 var current_position;
 
@@ -57,25 +57,38 @@ function initMap() {
 
 	/* Rightclick on map to add a new marker and get search results related to that area */
 	google.maps.event.addListener(map, "rightclick", function (event) {
+		remove_marker(markers);
 	    var latitude = event.latLng.lat();
 	    var longitude = event.latLng.lng();
 	    var myLatLng = {lat: latitude, lng: longitude};
 	    
 	    var marker = new google.maps.Marker({
+	    	id: "locfind",
 			position: myLatLng,
 			map: map
         });
+
+        markerArray.push(marker);
 
 	    /*
 		An event listener that zooms towards the marker the user clicks on.
 		Only used for new markers added to the map.
 	    */
-        google.maps.event.addListener(marker,'click',function() {
+        google.maps.event.addListener(marker,'click', function() {
 			map.setZoom(15);
 			map.setCenter(marker.getPosition());
 			ajax_instance(latitude, longitude);
 
-		});	
+		});
+
+        // Remove the marker when rightclicked. All other markers will remain.
+		google.maps.event.addListener(marker,'rightclick', function() {
+			if (this.id == "locfind") {
+				var index = markerArray.indexOf(this);
+				markerArray.splice(index,1);
+				this.setMap(null);
+			}
+		});
 
         // Get search results from the coordinates
 	    ajax_instance(latitude, longitude);

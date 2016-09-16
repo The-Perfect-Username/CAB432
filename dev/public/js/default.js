@@ -1,4 +1,8 @@
+// Global Variables
 var search;
+var markers = {};
+
+//jQuery
 $(document).ready(function() {
 
     search = $("input").val();
@@ -120,14 +124,21 @@ function result_design(id, name, rating, reviews, address, url, coords) {
     return html;
 }
 
-var markers = {};
+
 function show_result_icon_on_click(map) {
     $(document).on("click", ".result", function() {
+
+        // Clear any result markers on the map
         remove_marker(markers);
+        
+        // Get the coorindates of the business
         var coords = $(this).attr("rel");
         coords     = coords.split(",");
+        // Parse cooridnates
         var latitude = parseFloat(coords[0]);
         var longitude = parseFloat(coords[1]);
+
+        // Set cooridnates as object
         var pos = {
             lat: latitude,
             lng: longitude
@@ -140,8 +151,18 @@ function show_result_icon_on_click(map) {
         });
 
         markers[0] = marker;
+
+        // Add event handler to remove the marker when right-clicked
+        google.maps.event.addListener(marker,'rightclick', function() {
+            remove_marker(markers);
+        });
+
     });
+
+    
 }
+
+
 
 function m2km(miles) {
     return (miles * 1.6093).toFixed(2);  // returns a string
