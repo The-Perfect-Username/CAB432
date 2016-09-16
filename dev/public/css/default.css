@@ -20,7 +20,8 @@ main {
 #map {
 	display: inline-block;
 	height: 100%;
-	width: 100%;
+	width: calc(100% - 410px);
+	left: 410px;
 	position: absolute;
 	
 }
@@ -28,10 +29,10 @@ main {
 #side-bar {
 	display: inline-block;
 	position: absolute;
-	width: 400px;
-	max-height: 100%;
+	width: 410px;
+	height: 100%;
 	left: 0;
-	background: #fff;
+	background: #1aa3ff;
 }
 
 .wrapper {
@@ -45,10 +46,13 @@ main {
 #side-body {
 	display: inline-block;
 	position: relative;
-	height: 86.5vh;
+	height: 86%;
 	width: 100%;
 	overflow-y: scroll;
+	background: #fff;
 }
+
+
 
 .result {
 	padding: 10px;
@@ -57,7 +61,7 @@ main {
 
 .result:hover {
 	background: #f8f8f8;
-	cursor: pointer;;
+	cursor: pointer;
 }
 
 .result-info {
@@ -143,8 +147,8 @@ div#delete-icon {
 
 #info-circle-btn {
 	position: absolute;
-	left: 410px;
-	top: 20px;
+	left: 420px;
+	top: 70px;
 	font-size: 20px;
 	cursor: pointer;
 }
@@ -175,6 +179,10 @@ ul#popover-list {
 
 ::-webkit-scrollbar-thumb {
     background-color: rgb(111,111,111);
+}
+
+::-webkit-scrollbar-track {
+    background-color: rgb(222,222,222);
 }
 
 #sidebar-header-controls {
