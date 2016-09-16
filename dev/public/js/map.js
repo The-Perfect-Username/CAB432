@@ -64,6 +64,7 @@ function initMap() {
 	    
 	    var marker = new google.maps.Marker({
 	    	id: "locfind",
+	    	icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
 			position: myLatLng,
 			map: map
         });

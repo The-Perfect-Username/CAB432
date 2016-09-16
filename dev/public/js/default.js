@@ -146,6 +146,7 @@ function show_result_icon_on_click(map) {
         // Creates a new marker
         var marker = new google.maps.Marker({
             id: 1,
+            icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
             position: pos,
             map: map
         });
