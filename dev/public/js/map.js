@@ -47,7 +47,12 @@ function initMap() {
             // Sets the map center
 			map.setCenter(pos);
 
+		}, function() {
+			handleLocationError(true, infoWindow, map.getCenter());
 		});
+	} else {
+		// Browser doesn't support Geolocation
+		handleLocationError(false, infoWindow, map.getCenter());
 	}
 
 	/* Rightclick on map to add a new marker and get search results related to that area */
@@ -119,4 +124,11 @@ function initMap() {
 
     show_result_icon_on_click(map);
 
+}
+
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+	infoWindow.setPosition(pos);
+	infoWindow.setContent(browserHasGeolocation ?
+		'Error: The Geolocation service failed.' :
+		'Error: Your browser doesn\'t support geolocation.');
 }
