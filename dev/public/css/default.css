@@ -9,7 +9,7 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-
+/* Main wrapper */
 main {
     height: 100%;
     width: 100%;
@@ -17,15 +17,18 @@ main {
     overflow: hidden;;
 }
 
+/* Design for the map canvas */
 #map {
 	display: inline-block;
 	height: 100%;
+	/* Calculate responsive width and position of map canvas */
 	width: calc(100% - 410px);
 	left: 410px;
 	position: absolute;
 	
 }
 
+/* Sidebar designs */
 #side-bar {
 	display: inline-block;
 	position: absolute;
@@ -38,11 +41,29 @@ main {
 .wrapper {
 	padding: 12px;
 }
-
+/* Sidebar header */
 #side-header {
 	background: #1aa3ff;
 }
 
+/* Sidebar controls */
+#sidebar-header-controls {
+background-color: #4db8ff;
+padding: 5px;
+}
+
+#sidebar-header-controls ul.inline-list {
+margin: 0;
+}
+
+#sidebar-header-controls ul.inline-list li {
+color: #e6f5ff;
+font-weight: 600;
+margin-left: 5px;
+cursor: pointer;
+}
+
+/* Sidebar body */
 #side-body {
 	display: inline-block;
 	position: relative;
@@ -52,18 +73,18 @@ main {
 	background: #fff;
 }
 
-
-
+/* Search result Item design*/
 .result {
 	padding: 10px;
 	border-bottom: 1px solid #bbb;
 }
 
-.result:hover {
-	background: #f8f8f8;
-	cursor: pointer;
-}
+	.result:hover {
+		background: #f8f8f8;
+		cursor: pointer;
+	}
 
+/* Search result info */
 .result-info {
 	display: inline-block;
 	width: 75%;
@@ -71,21 +92,19 @@ main {
 	height: 100%;
 }
 
-.image-wrapper {
-	vertical-align: middle;
-	display: none;
-}
-
+/* Yelp link */
 a.yelp-link:hover {
 	color: #d90007;
 }
 
+/* General H designs */
 h1, h2, h3, h4 {
 	margin: 0;
 	padding: 0;
 	display: inline-block;
 }
 
+/* Inline list */
 ul.inline-list {
 	list-style: none;
 	padding: 0;
@@ -96,25 +115,30 @@ li.inline-item {
 	margin-right: 10px;
 }
 
+/* Grey glass */
 .grey {
 	color: #8c8c8c;
 }
-
+\
+/* Light-grey class */
 .light-grey {
 	color: #bbb;
 }
 
+/* Result business name */
 h4.result-name {
 	font-size: 16px;
 	font-weight: 600;
 }
 
+/* Business address info */
 .address-info {
 	font-size: 13px;
 	padding: 0;
 	font-weight: 600;
 }
 
+/* Search form */
 form .form-group {
 	padding: 0;
 	margin: 0;
@@ -172,7 +196,7 @@ ul#popover-list {
 		margin: 0 0 10px 0;
 	}
 
-
+/* Scroll bar custome design */
 ::-webkit-scrollbar {
     width: 8px;
 }
@@ -185,6 +209,7 @@ ul#popover-list {
     background-color: rgb(222,222,222);
 }
 
+/* Sidebar controls */
 #sidebar-header-controls {
 	background-color: #4db8ff;
 	padding: 5px;
