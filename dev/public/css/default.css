@@ -28,6 +28,13 @@ main {
 	
 }
 
+#result-content p#error {
+	padding: 10px;
+	text-align: center;
+	font-weight: bold;
+	color: red;
+}
+
 /* Sidebar designs */
 #side-bar {
 	display: inline-block;
@@ -119,7 +126,7 @@ li.inline-item {
 .grey {
 	color: #8c8c8c;
 }
-\
+
 /* Light-grey class */
 .light-grey {
 	color: #bbb;

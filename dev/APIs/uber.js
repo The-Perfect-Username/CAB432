@@ -29,7 +29,6 @@ function queryHandler(res, params) {
 }
 
 REST_ROUTER.prototype.handleRoutes = function(router) {
-	var self = this;
 	router.get("/fare/:start/:end", function(req, res){
 		
 		var start  = req.params.start;

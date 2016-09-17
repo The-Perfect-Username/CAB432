@@ -1,5 +1,7 @@
+// Require the Yelp API module
 var Yelp = require('yelp');
 
+// Create new YELP API object
 var yelp = new Yelp({
 	consumer_key: '_1Kxu0NdU02g_myZiaaVMQ',
 	consumer_secret: 'cQJNZiyseTLos6GPESktwOSAbQ0',
@@ -26,7 +28,6 @@ function queryHandler(res, params) {
 }
 
 REST_ROUTER.prototype.handleRoutes = function(router) {
-	var self = this;
 	router.get("/bylocation/:term/:location", function(req, res){
 		var term     = req.params.term;
 		var location = req.params.location;

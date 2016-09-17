@@ -1,10 +1,14 @@
+// Global Variables
 var map;
 var marker, markerArray = [];
-var current_coords;
-var current_position;
+var current_search_coords;
+var current_client_position;
+var current_marker;
 
+// Initialise Google Maps
 function initMap() {
-	//var marker;
+
+	// New map object
 	map = new google.maps.Map(document.getElementById('map'), {
 		zoom: 14
 	});
@@ -18,8 +22,9 @@ function initMap() {
 				lat: position.coords.latitude,
 				lng: position.coords.longitude
 			};
-			
-			current_position = pos.lat + "," + pos.lng;
+			// Store client's current esitmated position to be used for estimating Uber fares and distance
+			// in default.js
+			current_client_position = pos.lat + "," + pos.lng;
 			// Creates a new marker
 			var marker = new google.maps.Marker({
                 position: pos,
@@ -27,7 +32,9 @@ function initMap() {
                 title: "You are here"
             });
 
-			ajax_instance(pos.lat, pos.lng);
+            current_marker = marker;
+
+			get_results_from_coords(pos.lat, pos.lng);
 			/*
 			An event listener that zooms towards the marker the user clicks on.
 			Only used for the first marker shown on the map which shows the current
@@ -40,7 +47,7 @@ function initMap() {
 				map.setZoom(15);
 				map.setCenter(marker.getPosition());
 
-				ajax_instance(latitude, longitude);
+				get_results_from_coords(latitude, longitude);
 
 			});	
 
@@ -48,11 +55,11 @@ function initMap() {
 			map.setCenter(pos);
 
 		}, function() {
-			handleLocationError(true, infoWindow, map.getCenter());
+			handleLocationError(true, map);
 		});
 	} else {
 		// Browser doesn't support Geolocation
-		handleLocationError(false, infoWindow, map.getCenter());
+		handleLocationError(false, map);
 	}
 
 	/* Rightclick on map to add a new marker and get search results related to that area */
@@ -69,6 +76,8 @@ function initMap() {
 			map: map
         });
 
+        current_marker = marker;
+
         markerArray.push(marker);
 
 	    /*
@@ -76,9 +85,13 @@ function initMap() {
 		Only used for new markers added to the map.
 	    */
         google.maps.event.addListener(marker,'click', function() {
+        	
 			map.setZoom(15);
 			map.setCenter(marker.getPosition());
-			ajax_instance(latitude, longitude);
+			if (current_marker != this) {
+				current_marker = this;
+				get_results_from_coords(latitude, longitude);
+			}
 
 		});
 
@@ -92,43 +105,22 @@ function initMap() {
 		});
 
         // Get search results from the coordinates
-	    ajax_instance(latitude, longitude);
+	    get_results_from_coords(latitude, longitude);
 	    
 	});
-
-	function ajax_instance(latitude, longitude) {
-	    // jQuery
-	    $(function(){
-	    	var coords = latitude + ',' + longitude;
-	    	coords = coords.toString();
-	    	current_coords = coords;
-	    	search = $("input").val();
-	    	$.ajax({
-	    		type: 'GET',
-	    		url: "yelp/bycoord/" + search + "/" + coords,
-	    		beforeSend: function() {
-	    			spinner_icon();
-	    		},
-	    		success: function(data) {
-	    			var result = data[0].rating + ", " + data[0].name;
-	    			var len = data.length;
-	    			var t = thing(data);
-	    			$('div#text').html(t);
-	    			x_icon();
-	    		}
-
-	    	});
-	    	
-	    });
-    }
 
     show_result_icon_on_click(map);
 
 }
 
-function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-	infoWindow.setPosition(pos);
-	infoWindow.setContent(browserHasGeolocation ?
-		'Error: The Geolocation service failed.' :
-		'Error: Your browser doesn\'t support geolocation.');
+// Handles the geolocation error if the geolocation encounters an error
+function handleLocationError(browserHasGeolocation, map) {
+	// Coordinates of Brisbane Center
+	var Brisbane_Coordinates = {lat: -27.3818631, lng: 152.7130056};
+	map.setZoom(13);
+	map.setCenter(Brisbane_Coordinates);
+	// Display the error result in the sidebar
+	document.getElementById("result-content").innerHTML = browserHasGeolocation ?
+		'<p id="error">Error: The Geolocation service failed. Please allow your browser to know your location.</p>' :
+		'<p id="error">Error: Your browser doesn\'t support geolocation.</p>';
 }
