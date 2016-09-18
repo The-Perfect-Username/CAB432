@@ -1,55 +1,66 @@
 // Global Variables
 var search;
 var markers = {};
+// Error message for when the client is unable to process a request to the Yelp API
+var search_error_response = "<p id='error'>Unable to process request.</p>";
 
 //jQuery
 $(document).ready(function() {
 
-    
-    // Search form submission event
+    // Search for businesses that have a specific search term related to them.
 	$("form").on("submit", function(e) {
 		e.preventDefault();
         // Get the current search term from the search input
         search = $("input").val();
+        // Prevent any requests to go through if there are no search terms
         if (search == "" || search == null) return false;
-        // Get business search results near the current searched area
+        // Get business search results near the current searched area from the Yelp API
 		$.ajax({
     		type: 'GET',
     		url: "yelp/bycoord/" + search + "/" + current_search_coords,
             beforeSend: function() {
-                // Show spinner icon before load
+                // Show spinner icon before data loads
                 spinner_icon();
             },
+            // Formats the data into HTML then displays the results
+            // in the sidebar. Replaces the loading spinner in the
+            // search bar with the X icon
     		success: function(data) {
-                // Format search data in HTML
     			var t = format_result_to_html(data);
-                // Embed results as HTML
     			$('div#result-content').html(t);
-                // Replace spinner icon with the X icon
                 x_icon();
     		}, error: function() {
-                $('div#result-content').html("<p id='error'>Unable to process request.</p>");
+                // Handle error
+                $('div#result-content').html(search_error_response);
             }
     	});
 
 	});
-
+    // Searches for businesses but for sorted results
     $(document).on("click", ".search-by", function() {
+        // Sort query value
         var sort = parseInt($(this).attr("rel"));
+        // Get the current search term from the search input
         search   = $("input").val();
+        // Prevent any requests to go through if there are no search terms
         if (search == "" || search == null) return false;
+        // Gets sorted business search results near the current searched area from the Yelp API
         $.ajax({
             type: 'GET',
             url: "yelp/bycoord/" + search + "/" + current_search_coords + "/" + sort,
             beforeSend: function() {
                 spinner_icon();
             },
+            // Formats the data into HTML then displays the results
+            // in the sidebar. Replaces the loading spinner in the
+            // search bar with the X icon
             success: function(data) {
                 var t = format_result_to_html(data);
                 $('div#result-content').html(t);
                 x_icon();
             }, error: function() {
-                $('div#result-content').html("<p id='error'>Unable to process request.</p>");
+                // Handle Error
+                $('div#result-content').html(search_error_response);
             }
         });
 
@@ -93,25 +104,33 @@ $(document).ready(function() {
 });
 
 function get_results_from_coords(latitude, longitude) {
-    // jQuery
+    // Initialise jQuery to use the $.ajax function
+    // when called in map.js
     $(function(){
         var coords            = latitude + ',' + longitude;
         coords                = coords.toString();
         current_search_coords = coords;
         search                = $("input").val();
+        // Prevent any requests to go through if there are no search terms
         if (search == "" || search == null) return false;
+        // Send the request to the Yelp API
         $.ajax({
             type: 'GET',
             url: "yelp/bycoord/" + search + "/" + coords,
             beforeSend: function() {
+                // Show the spinner icon while waiting for the response
                 spinner_icon();
             },
+            // Formats the data into HTML then displays the results
+            // in the sidebar. Replaces the loading spinner in the
+            // search bar with the X icon
             success: function(data) {
                 var t = format_result_to_html(data);
                 $('div#result-content').html(t);
                 x_icon();
             }, error: function() {
-                $('div#result-content').html("<p id='error'>Unable to process request.</p>");
+                // Handle error
+                $('div#result-content').html(search_error_response);
             }
 
         });
@@ -119,18 +138,27 @@ function get_results_from_coords(latitude, longitude) {
     });
 }
 
+// Extracts the data result and inserts it into HTML
+// The data retrieved is from the Yelp API and displays
+// the business' name, address, number of reviews, the rating,
+// and provides the business' latitude and longitiude coordindates
+// as well as a link to its yelp page.
 function format_result_to_html(data) {
     var html = "";
+    // Number of businesses found
     var length = data.length;
+    // Data variables
     var name, rating_img, num_of_reviews, preview_image, address, url, coords;
+    // If there are results then extract the data and format it in HMTL, otherwise
+    // display an error message stating there was nothing found.
     if (length > 0) {
         for (var i = 0; i < length; i++) {
-            rating_img     = data[i].rating_img_url;
-            name           = data[i].name; 
-            num_of_reviews = data[i].review_count;
-            address        = data[i].location.display_address[0] + ", " + data[i].location.display_address[1];
-            url            = data[i].url;
-            coords         = data[i].location.coordinate.latitude + "," + data[i].location.coordinate.longitude;
+            rating_img     = data[i].rating_img_url; // Star rating image
+            name           = data[i].name;           // Name of the business
+            num_of_reviews = data[i].review_count;   // Number of user reviews
+            address        = data[i].location.display_address[0] + ", " + data[i].location.display_address[1]; // The street address and suburb
+            url            = data[i].url; // Url to the dedicated Yelp page
+            coords         = data[i].location.coordinate.latitude + "," + data[i].location.coordinate.longitude; // lat & lng coorindates
             uber_fare_estimate(i, current_client_position, coords);
 
             html += result_design(i, name, rating_img, num_of_reviews, address, url, coords);
@@ -138,38 +166,44 @@ function format_result_to_html(data) {
     } else {
         html = "<p id='error'>Nothing found</p>";
     }
-    return html;
+    return html; // return the HTML implemetation to display the results
 }
 
+// HTML format of the search result.
+// This will be used in the function 'format_result_to_html'
 function result_design(id, name, rating, reviews, address, url, coords) {
     html = "<div class='result' rel='" + coords + "'>";
-    html += "<div class='result-info'>";
-    html += "<h4 class='result-name'>" + name + "</h4>";
-    html += "<ul class='inline-list'>";
-    html += "<li class='inline-item'>";
-    html += "<span><img src='" + rating + "' alt='rating'></span>";
-    html += "</li>"
-    html += "<li class='inline-item light-grey'>";
-    html += "(" + reviews + ")";
-    html += "</li>";
-    html += "<li class='inline-item light-grey'>";
-    html += "<a class='yelp-link light-grey' href='" + url + "' target='_blank' title='View on Yelp'><i class='fa fa-yelp' aria-hidden='true'></i></a>";
-    html += "</li>";
-    html += "<li class='inline-item light-grey'>";
-    html += "<span id='uber-fare-" + id + "' title='Uber fare estimates'><i id='uber-load-" + id + "' class='fa fa-spinner fa-spin' aria-hidden='true'></i></span>";
-    html += "</li>";
-    html += "<li class='inline-item light-grey'>";
-    html += "<span id='distance-" + id + "' title='Distance'><i id='uber-load-" + id + "' class='fa fa-spinner fa-spin' aria-hidden='true'></i></span>";
-    html += "</li>";
-    html += "</ul>";
-    html += "<p class='address-info grey'>" + address + "</p>";
-    html += "</div>";
+    html +=     "<div class='result-info'>";
+    html +=         "<h4 class='result-name'>" + name + "</h4>";
+    html +=         "<ul class='inline-list'>";
+    html +=             "<li class='inline-item'>";
+    html +=                 "<span><img src='" + rating + "' alt='rating'></span>";
+    html +=             "</li>"
+    html +=             "<li class='inline-item light-grey'>";
+    html +=                 "(" + reviews + ")";
+    html +=             "</li>";
+    html +=             "<li class='inline-item light-grey'>";
+    html +=                 "<a class='yelp-link light-grey' href='" + url + "' target='_blank' title='View on Yelp'>";
+    html +=                 "<i class='fa fa-yelp' aria-hidden='true'></i></a>";
+    html +=             "</li>";
+    html +=             "<li class='inline-item light-grey'>";
+    html +=                 "<span id='uber-fare-" + id + "' title='Uber fare estimates'>";
+    html +=                 "<i id='uber-load-" + id + "' class='fa fa-spinner fa-spin' aria-hidden='true'></i></span>";
+    html +=             "</li>";
+    html +=             "<li class='inline-item light-grey'>";
+    html +=                 "<span id='distance-" + id + "' title='Estimated travel distance'>";
+    html +=                 "<i id='uber-load-" + id + "' class='fa fa-spinner fa-spin' aria-hidden='true'></i></span>";
+    html +=             "</li>";
+    html +=         "</ul>";
+    html +=         "<p class='address-info grey'>" + address + "</p>";
+    html +=     "</div>";
     html += "</div>";
 
     return html;
 }
 
-
+// Displays the business marker on the map when 
+// the user clicks on a search result
 function show_result_icon_on_click(map) {
     $(document).on("click", ".result", function() {
 
@@ -178,9 +212,10 @@ function show_result_icon_on_click(map) {
         
         // Get the coorindates of the business
         var coords = $(this).attr("rel");
-        coords     = coords.split(",");
+        // Convert to array
+        coords = coords.split(","); 
         // Parse cooridnates
-        var latitude = parseFloat(coords[0]);
+        var latitude  = parseFloat(coords[0]);
         var longitude = parseFloat(coords[1]);
 
         // Set cooridnates as object
@@ -196,6 +231,7 @@ function show_result_icon_on_click(map) {
             map: map
         });
 
+        // Add marker to the array
         markers[0] = marker;
 
         // Add event handler to remove the marker when right-clicked
@@ -235,9 +271,11 @@ function uber_fare_estimate(id, start, end) {
     });
 }
 
-// Removes markers from the map
+// Removes business markers from the map
 function remove_marker(markers) {
+    // Checks if there are any existing markers
     if (markers[0]) {
+        // Removes all business markers from the map and the array
         markers[0].setMap(null);
         delete markers[0];
     }

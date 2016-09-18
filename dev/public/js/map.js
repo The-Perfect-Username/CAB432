@@ -47,7 +47,10 @@ function initMap() {
 				map.setZoom(15);
 				map.setCenter(marker.getPosition());
 
-				get_results_from_coords(latitude, longitude);
+				if (current_marker != this) {
+					current_marker = this;
+					get_results_from_coords(latitude, longitude);
+				}
 
 			});	
 
