@@ -20,7 +20,7 @@ app.get('/', function(req, res) {
     app.use(express.static(__dirname + '/public'));
 });
 
-// Configure routing 
+// Configure routing
 REST.prototype.configure = function() {
 	var self = this;
 	var router = express.Router();

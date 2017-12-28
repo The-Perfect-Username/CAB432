@@ -3,8 +3,8 @@ var Uber = require('node-uber');
 // Authorises use of the Uber API
 var uber = new Uber({
 	client_id: 'ANFBZUeCN5uuK6ZF_TWDJKL1zAxQb2aW',
-	client_secret: '_TqWY_N2pat7JH9y_dHKNVMZlsSPG3C68ukUrqsH',
-	server_token: '_inarMZORSfhRO_abrG2ebtstfyNjpOVOjJ2lHWT',
+	client_secret: 'QFFdPX8111-z3u67R8XDCBZ0sTsJoiUBPbJhCOpl',
+	server_token: 'dF-rfYeDNWw-tDzTSXhpjk8M2FkQDw7kmezqO5iv',
 	redirect_uri: 'http://localhost:3000',
 	name: 'TRAVELAPP CAB432',
 	language: 'en_US', // optional, defaults to en_US
@@ -28,12 +28,12 @@ function queryHandler(res, params) {
  			res.send(data); // Sends Results
  		}
 	});
-	
+
 }
 
 REST_ROUTER.prototype.handleRoutes = function(router) {
 
-	router.get("/fare/:start/:end", function(req, res){	
+	router.get("/fare/:start/:end", function(req, res){
 		// Client and Business Coordinates
 		var start  = req.params.start;
 		var end    = req.params.end;

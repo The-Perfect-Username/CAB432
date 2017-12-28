@@ -17,15 +17,15 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-	    
+
 	</head>
 	<body>
-	    
+
 	    <main>
 	    	<!-- Map container -->
 	        <section id="map"></section>
 	        <!-- Google Maps API -->
-		    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_NYrK0N2987MBbVFsxn_vUyCkZVnsgHU&callback=initMap"
+		    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSO2YlPxS7MU7h87C_Fyk25VKC2t6Njj0&callback=initMap"
 		    async defer></script>
 		    <!-- Side bar: Contains the search input and the search results -->
 		    <section id="side-bar">
@@ -56,9 +56,9 @@
 				    <!-- Control menu for search results -->
 				    <div id="sidebar-header-controls">
 				    	<ul class='inline-list'>
-				    		<li class="inline-item search-by" rel="0">Best</li>
-				    		<li class="inline-item search-by" rel="1">Distance</li>
-				    		<li class="inline-item search-by" rel="2">Rating</li>
+				    		<li class="inline-item search-by" rel="best_match">Best</li>
+				    		<li class="inline-item search-by" rel="distance">Distance</li>
+				    		<li class="inline-item search-by" rel="rating">Rating</li>
 				    	</ul>
 				    </div>
 				</div>
@@ -70,4 +70,3 @@
 	    </main>
 	</body>
 </html>
-

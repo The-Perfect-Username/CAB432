@@ -1,13 +1,9 @@
-// Require the Yelp API module
-var Yelp = require('yelp');
+'use strict';
+
+const Yelp = require('yelp-fusion');
 
 // Authorises use of the Yelp API
-var yelp = new Yelp({
-	consumer_key: '_1Kxu0NdU02g_myZiaaVMQ',
-	consumer_secret: 'cQJNZiyseTLos6GPESktwOSAbQ0',
-	token: 'UoJZd3FQZaPfD-fpfTkYEmZad7IMmJIr',
-	token_secret: 'FfGhCbWh-kAOd55qOZhulhgttuY',
-});
+var yelp = Yelp.client('ilMklTiesLyYDYOaA5hklKs4CQRw0OvxzQM1bib6f7NYOGVNi1AyrAgDu_6esuxtbPh8_bhWraa2I06K0QELDQ3_O4TPjK4jP6navRGs0ndBHMZslx7ptCgZVkREWnYx');
 
 
 function REST_ROUTER(router) {
@@ -20,33 +16,36 @@ function REST_ROUTER(router) {
 function queryHandler(res, params) {
 	yelp.search(params)
 	.then(function (data) {
-		res.send(data.businesses); // Returns Data specific to Businesses
+		console.log(data.jsonBody.businesses);
+		res.send(data.jsonBody.businesses); // Returns Data specific to Businesses
 	})
 	.catch(function (err) {
 		res.send(err);
 	});
-	
+
 }
 
 REST_ROUTER.prototype.handleRoutes = function(router) {
 
 	router.get("/bycoord/:term/:ll", function(req, res){
 		var term   = req.params.term; // Search term
-		var ll     = req.params.ll; // Lat and Lon coordinates
+		var lat    = req.params.ll.split(',')[0]; // Lat and Lon coordinates
+		var lon    = req.params.ll.split(',')[1]; // Lat and Lon coordinates
 		// Set parameters
-		var params = {"term": term, "ll": ll};
+		var params = {"term": term, "latitude": lat, "longitude": lon};
 		queryHandler(res, params);
 	});
 
-	// Searches for business' with a specific search term at a 
+	// Searches for business' with a specific search term at a
 	// certain location and sorts the data by Best, Distance, or
 	// Rating
 	router.get("/bycoord/:term/:ll/:sort", function(req, res){
 		var term   = req.params.term; // Search term
-		var ll     = req.params.ll;   // Lat and Lon coordinates
+		var lat    = req.params.ll.split(',')[0]; // Lat and Lon coordinates
+		var lon    = req.params.ll.split(',')[1]; // Lat and Lon coordinates
 		var sort   = req.params.sort; // Sort value
 		// Set parameters
-		var params = {"term": term, "ll": ll, "sort": sort};
+		var params = {"term": term, "latitude": lat, "longitude": lon, "sort_by": sort};
 		queryHandler(res, params);
 	});
 };

@@ -39,7 +39,7 @@ $(document).ready(function() {
     // Searches for businesses but for sorted results
     $(document).on("click", ".search-by", function() {
         // Sort query value
-        var sort = parseInt($(this).attr("rel"));
+        var sort = $(this).attr("rel");
         // Get the current search term from the search input
         search   = $("input").val();
         // Prevent any requests to go through if there are no search terms
@@ -64,7 +64,7 @@ $(document).ready(function() {
             }
         });
 
-    });    
+    });
 
     // Remove the search term from the search bar
     $(document).on("click", "#delete-icon", function() {
@@ -80,7 +80,7 @@ $(document).ready(function() {
     function popover_design() {
         var html = "<ul id='popover-list'>";
         html += " <li><b>Best Match</b> sorts results based off distance, reviews, and ratings.</li>";
-        html += " <li><b>Distance</b> sorts results out by linear distance.</li>";
+        html += " <li><b>Distance</b> sorts results out by linear distance. Travel distance by driving will be different.</li>";
         html += " <li><b>Rating</b> returns the higher rated results first.</li>";
         html += " <li><b>Right click</b> on the map to set a new marker and find results near that area. Rightclick each green and blue marker to remove them from the map.</li>";
         html += " <li><b>Left click</b> on the marker to zoom in and center the map.</li>";
@@ -134,7 +134,7 @@ function get_results_from_coords(latitude, longitude) {
             }
 
         });
-        
+
     });
 }
 
@@ -153,15 +153,16 @@ function format_result_to_html(data) {
     // display an error message stating there was nothing found.
     if (length > 0) {
         for (var i = 0; i < length; i++) {
-            rating_img     = data[i].rating_img_url; // Star rating image
+            rating         = data[i].rating; // Star rating image
             name           = data[i].name;           // Name of the business
             num_of_reviews = data[i].review_count;   // Number of user reviews
             address        = data[i].location.display_address[0] + ", " + data[i].location.display_address[1]; // The street address and suburb
             url            = data[i].url; // Url to the dedicated Yelp page
-            coords         = data[i].location.coordinate.latitude + "," + data[i].location.coordinate.longitude; // lat & lng coorindates
+            coords         = data[i].coordinates.latitude + "," + data[i].coordinates.longitude; // lat & lng coorindates
+            distance       = (parseInt(data[i].distance) / 1000).toFixed(2) + "km";
             uber_fare_estimate(i, current_client_position, coords);
 
-            html += result_design(i, name, rating_img, num_of_reviews, address, url, coords);
+            html += result_design(i, name, rating, num_of_reviews, address, url, coords, distance);
         }
     } else {
         html = "<p id='error'>Nothing found</p>";
@@ -171,13 +172,13 @@ function format_result_to_html(data) {
 
 // HTML format of the search result.
 // This will be used in the function 'format_result_to_html'
-function result_design(id, name, rating, reviews, address, url, coords) {
+function result_design(id, name, rating, reviews, address, url, coords, distance) {
     html = "<div class='result' rel='" + coords + "'>";
     html +=     "<div class='result-info'>";
     html +=         "<h4 class='result-name'>" + name + "</h4>";
     html +=         "<ul class='inline-list'>";
     html +=             "<li class='inline-item'>";
-    html +=                 "<span><img src='" + rating + "' alt='rating'></span>";
+    html +=                 "<span><img src='images/regular_" + rating + ".png' alt='rating'></span>";
     html +=             "</li>"
     html +=             "<li class='inline-item light-grey'>";
     html +=                 "(" + reviews + ")";
@@ -191,8 +192,7 @@ function result_design(id, name, rating, reviews, address, url, coords) {
     html +=                 "<i id='uber-load-" + id + "' class='fa fa-spinner fa-spin' aria-hidden='true'></i></span>";
     html +=             "</li>";
     html +=             "<li class='inline-item light-grey'>";
-    html +=                 "<span id='distance-" + id + "' title='Estimated travel distance'>";
-    html +=                 "<i id='uber-load-" + id + "' class='fa fa-spinner fa-spin' aria-hidden='true'></i></span>";
+    html +=                 "<span title='Distance'>"+distance+"</span>";
     html +=             "</li>";
     html +=         "</ul>";
     html +=         "<p class='address-info grey'>" + address + "</p>";
@@ -202,18 +202,18 @@ function result_design(id, name, rating, reviews, address, url, coords) {
     return html;
 }
 
-// Displays the business marker on the map when 
+// Displays the business marker on the map when
 // the user clicks on a search result
 function show_result_icon_on_click(map) {
     $(document).on("click", ".result", function() {
 
         // Clear any result markers on the map
         remove_marker(markers);
-        
+
         // Get the coorindates of the business
         var coords = $(this).attr("rel");
         // Convert to array
-        coords = coords.split(","); 
+        coords = coords.split(",");
         // Parse cooridnates
         var latitude  = parseFloat(coords[0]);
         var longitude = parseFloat(coords[1]);
@@ -239,7 +239,7 @@ function show_result_icon_on_click(map) {
             remove_marker(markers);
         });
 
-    });   
+    });
 }
 
 // Converts miles to kilometres
@@ -264,7 +264,6 @@ function uber_fare_estimate(id, start, end) {
                 // Inject the data from the Uber API into the HTML elements
                 if (data.statusCode != error_code) {
                     $("span#uber-fare-" + id).text("$" + data.prices[0].low_estimate + " - $" + data.prices[0].high_estimate);
-                    $("span#distance-" + id).text(m2km(parseFloat(data.prices[0].distance)) + " km");
                 }
             }
         });
@@ -293,6 +292,5 @@ function spinner_icon() {
 function x_icon() {
     $("i.main-spinner").addClass("fa-times");
     $("i.fa-times").removeClass("fa-spinner fa-spin main-spinner");
-    
-}
 
+}
